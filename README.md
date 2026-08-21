@@ -60,20 +60,31 @@ not during.
 
 ## The day
 
-| Time | | |
+| Agenda | | |
 |---|---|---|
 | 0:00 | Welcome, framing, pair up | 10 min |
 | 0:10 | What's actually in the 13 files | 5 min |
-| 0:15 | Budget Buddy teardown | 10 min |
-| 0:25 | Pick your lane, scope your idea | 10 min |
-| 0:35 | **Sprint 1: get the data out** | 20 min |
-| 0:55 | **Data checkpoint** | 5 min |
-| 1:00 | **Sprint 2: build and deploy** | 35 min |
+| 0:15 | Budget Buddy teardown | 5 min |
+| 0:20 | Pick your lane, scope your idea | 10 min |
+| 0:30 | **Sprint 1: get the data out** | 15 min |
+| 0:50 | **Data checkpoint** | 5 min |
+| 0:55| **Sprint 2: build and deploy** | 45 min |
 | 1:35 | Show and tell | 25 min |
 | 2:00 | Q&A, then wrap | 15 min |
 
-Two hard gates: **a data file you can open by 0:55**, and **a live URL by 1:30**.
+Two hard gates: **a data file you can open by 0:50**, and **a live URL by 1:25**.
 Polish comes after both.
+
+| Which file to open and when | | |
+|---|---|---|
+| 0:00 | SETUP.md  ·  done at home, ends with your URL live  | read |
+| 0:20 | prompts/00-kickoff.md  ·  Path A or Path B, then paste | paste |
+| 0:30 | EXTRACTING-DATA.md  ·  pick one of the four routes | read |
+| 0:35 | prompts/02-extract.md  ·  paste, get a CSV, open it | paste |
+| 0:50 | prompts/04-verify.md  ·  paste, reconcile the numbers| paste |
+| 0:55| prompts/03-build.md  ·  paste, build on template/ | paste |
+| 1:25 | prompts/05-deploy.md  ·  upload to GitHub, go live | do |
+| 1:30 | CHECKLIST.md  ·  run through it before you demo | check |
 
 ---
 
