@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cost of Living Calculator · 2026-27 ACT Budget</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js" crossorigin></script>
+<script src="data.js"></script>
+<style>
+  :root{
+    --surface:#fcfcfb; --card:#ffffff; --line:#e6e2da;
+    --ink:#2b2420; --ink-2:#5c5249; --ink-3:#857a6e;
+    --cost:#b85042;      /* taxes and fees */
+    --relief:#0f7ba8;    /* concessions */
+    --tint:#e7e8d1;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 20px 80px}
+  h1{font-size:26px;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--ink-2);margin:0 0 26px;font-size:15px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);
+    margin:34px 0 12px;font-weight:600}
+
+  .picker{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .hh{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;cursor:pointer;font:inherit;color:inherit;transition:border-color .12s}
+  .hh:hover{border-color:var(--ink-3)}
+  .hh:focus-visible{outline:3px solid var(--relief);outline-offset:2px}
+  .hh[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .hh b{display:block;font-size:15px;margin-bottom:2px}
+  .hh span{display:block;font-size:13px;color:var(--ink-2)}
+
+  .kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:6px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .kpi .lab{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3)}
+  .kpi .val{font-size:27px;font-weight:600;letter-spacing:-.02em;margin-top:4px;
+    font-variant-numeric:tabular-nums}
+  .kpi .note{font-size:12px;color:var(--ink-3);margin-top:2px}
+  .up{color:#1d6b4f}.down{color:var(--cost)}
+
+  .legend{display:flex;gap:18px;align-items:center;margin:0 0 12px;font-size:13px;color:var(--ink-2)}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .yr{margin-bottom:16px}
+  .yr:last-child{margin-bottom:0}
+  .yr h3{margin:0 0 8px;font-size:13px;color:var(--ink-3);font-weight:600;letter-spacing:.05em}
+  .row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .row:last-child{margin-bottom:0}
+  .rl{flex:0 0 96px;font-size:12px;color:var(--ink-2)}
+  .track{flex:1;height:16px;position:relative;display:block;
+    background:#f2efe9;border-radius:0 4px 4px 0}
+  .bar{display:block;height:16px;border-radius:0 4px 4px 0;position:relative;cursor:default}
+  .bar:hover{filter:brightness(1.08)}
+  .rv{flex:0 0 84px;text-align:right;font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);
+    font-weight:600;background:#faf9f6}
+  tbody tr:last-child td{border-bottom:none}
+  td{font-variant-numeric:tabular-nums}
+  tr.group td{background:#faf9f6;font-weight:600;font-size:12px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--ink-3)}
+  tr.total td{font-weight:600;background:#faf9f6}
+  .dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:7px;vertical-align:0}
+
+  .flag{background:#fdf6ec;border:1px solid #e8d6b8;border-radius:10px;padding:12px 14px;
+    font-size:13.5px;color:#6b4f27;margin-top:14px}
+  .flag b{color:#5a4120}
+  footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--ink-3)}
+  a{color:var(--relief)}
+  @media (max-width:560px){ .rl{flex-basis:78px;font-size:11px} .rv{flex-basis:70px;font-size:12px} }
+</style>
+</head>
+<body data-palette="B85042,0F7BA8">
+<div id="root" class="wrap"></div>
+
+<script type="text/babel">
+const {useState, useEffect} = React;
+
+const TAX = [
+  ["rates_pfesl_sfl_hl","Rates, PFESL, SFL, HL"],
+  ["conveyance_duty","Conveyance duty"],
+  ["vehicle_charges","Vehicle charges"],
+  ["public_transport_fares","Public transport fares"],
+  ["utilities","Utilities"],
+];
+const CON = [
+  ["rates_pfesl_concession","Rates and PFESL concession"],
+  ["conveyance_duty_concession","Conveyance duty concession"],
+  ["vehicle_concession","Vehicle concession"],
+  ["public_transport_concession","Public transport concession"],
+  ["utilities_concession","Utilities concession"],
+];
+const YEARS = ["2025-26","2026-27"];
+const sum = (r, keys) => keys.reduce((a,[k]) => a + (r[k] || 0), 0);
+const money = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-AU");
+
+function Bars({hh}) {
+  const max = Math.max(...YEARS.map(y =>
+    Math.max(sum(hh.years[y], TAX), sum(hh.years[y], CON)))) || 1;
+  return (
+    <div className="chart">
+      <div className="legend">
+        <span><i className="sw" style={{background:"var(--cost)"}}></i>Taxes and fees paid</span>
+        <span><i className="sw" style={{background:"var(--relief)"}}></i>Concessions received</span>
+      </div>
+      {YEARS.map(y => {
+        const r = hh.years[y], t = sum(r,TAX), c = sum(r,CON);
+        return (
+          <div className="yr" key={y}>
+            <h3>{y}</h3>
+            {[["Taxes and fees",t,"var(--cost)"],["Concessions",c,"var(--relief)"]].map(([lab,v,col]) => (
+              <div className="row" key={lab}>
+                <span className="rl">{lab}</span>
+                <span className="track">
+                  <span className="bar" style={{width:Math.max((v/max)*100,0.8)+"%",background:col}}
+                        title={lab+" "+y+": "+money(v)}></span>
+                </span>
+                <span className="rv">{money(v)}</span>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Table({hh}) {
+  const a = hh.years["2025-26"], b = hh.years["2026-27"];
+  const line = (label,k,col) => (
+    <tr key={k}>
+      <td><i className="dot" style={{background:col}}></i>{label}</td>
+      <td>{money(a[k]||0)}</td><td>{money(b[k]||0)}</td>
+      <td>{money((b[k]||0)-(a[k]||0))}</td>
+    </tr>
+  );
+  return (
+    <table>
+      <caption className="sr-only" style={{position:"absolute",left:"-9999px"}}>
+        Taxes, fees and concessions by year</caption>
+      <thead><tr><th>Item</th><th>2025-26</th><th>2026-27</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr className="group"><td colSpan="4">Taxes and fees paid</td></tr>
+        {TAX.map(([k,l]) => line(l,k,"var(--cost)"))}
+        <tr className="total"><td>Total taxes and fees</td>
+          <td>{money(sum(a,TAX))}</td><td>{money(sum(b,TAX))}</td>
+          <td>{money(sum(b,TAX)-sum(a,TAX))}</td></tr>
+        <tr className="group"><td colSpan="4">Concessions received</td></tr>
+        {CON.map(([k,l]) => line(l,k,"var(--relief)"))}
+        <tr className="total"><td>Total concessions</td>
+          <td>{money(sum(a,CON))}</td><td>{money(sum(b,CON))}</td>
+          <td>{money(sum(b,CON)-sum(a,CON))}</td></tr>
+        <tr className="total"><td>Net disposable income</td>
+          <td>{money(a.net_disposable_income)}</td><td>{money(b.net_disposable_income)}</td>
+          <td>{money(b.net_disposable_income-a.net_disposable_income)}</td></tr>
+      </tbody>
+    </table>
+  );
+}
+
+function App() {
+  const [sel, setSel] = useState(() => localStorage.getItem("cocl.hh") || "1");
+  useEffect(() => { localStorage.setItem("cocl.hh", sel); }, [sel]);
+  const hh = HOUSEHOLDS.find(h => h.id === sel) || HOUSEHOLDS[0];
+  const a = hh.years["2025-26"], b = hh.years["2026-27"];
+  // Use the figure the Budget publishes, not our own subtraction, so every
+  // number on screen can be pointed at a cell in Table 3.3.2.
+  const change = (b.change !== null && b.change !== undefined)
+    ? b.change : b.net_disposable_income - a.net_disposable_income;
+  const check = (r) => (r.disposable_income - sum(r,TAX) + sum(r,CON)) - r.net_disposable_income;
+  const off = YEARS.filter(y => Math.abs(check(hh.years[y])) > 2);
+
+  return (
+    <React.Fragment>
+      <h1>What the 2026-27 ACT Budget does to your household</h1>
+      <p className="sub">Nine household scenarios published in the Budget. Pick the closest one
+        to you and see what changes, line by line.</p>
+
+      <h2>1. Pick the closest household</h2>
+      <div className="picker">
+        {HOUSEHOLDS.map(h => (
+          <button key={h.id} className="hh" aria-pressed={h.id === sel} onClick={() => setSel(h.id)}>
+            <b>{h.suburb}</b><span>{h.household}</span>
+          </button>
+        ))}
+      </div>
+
+      <h2>2. What changes for {hh.suburb}</h2>
+      <div className="kpis">
+        <div className="kpi">
+          <div className="lab">Net disposable income</div>
+          <div className="val">{money(b.net_disposable_income)}</div>
+          <div className="note">2026-27, after taxes, fees and concessions</div>
+        </div>
+        <div className="kpi">
+          <div className="lab">Change on last year</div>
+          <div className={"val " + (change >= 0 ? "up" : "down")}>
+            {change >= 0 ? "+" : ""}{money(change)}
+          </div>
+          <div className="note">{change >= 0 ? "better off" : "worse off"} than 2025-26</div>
+        </div>
+        <div className="kpi">
+          <div className="lab">Concessions received</div>
+          <div className="val">{money(sum(b,CON))}</div>
+          <div className="note">across 5 concession types in 2026-27</div>
+        </div>
+      </div>
+
+      <h2>3. Taxes and fees vs concessions</h2>
+      <Bars hh={hh} />
+
+      <h2>4. Every line, both years</h2>
+      <Table hh={hh} />
+
+      {off.length > 0 && (
+        <div className="flag">
+          <b>Data note.</b> For this household the published net disposable income for {off.join(" and ")} does
+          not equal disposable income minus taxes and fees plus concessions. The gap is
+          {" "}{money(Math.abs(check(hh.years[off[0]])))}. We show the published figure and flag the
+          difference rather than silently correcting it. Check the source before quoting it.
+        </div>
+      )}
+
+      <footer>
+        <p>Every figure comes from Table 3.3.2, <em>2026-27 ACT Budget Cost of Living Statement</em>.
+          Disposable income is gross income minus income tax and the Medicare levy, per the source note.
+          Figures are for a published scenario household, not for you.</p>
+        <p>This is an illustrative guide, not financial advice or an eligibility determination.
+          Check <a href="https://www.act.gov.au">act.gov.au</a> and the
+          {" "}<a href="https://www.treasury.act.gov.au/budget/budget-2026-27/budget-papers-and-statements">official
+          Budget papers</a> for eligibility criteria and exact figures.</p>
+        <p>Your selection is saved in this browser only. Nothing is sent anywhere.</p>
+      </footer>
+    </React.Fragment>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

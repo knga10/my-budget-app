@@ -1,0 +1,19 @@
+id,suburb,household,year,disposable_income,rates_pfesl_sfl_hl,conveyance_duty,vehicle_charges,public_transport_fares,utilities,rates_pfesl_concession,conveyance_duty_concession,vehicle_concession,public_transport_concession,utilities_concession,net_disposable_income,change
+1,Belconnen,"Single, pensioner, in own unit, no car",2025-26,29900.0,1801.0,0.0,0.0,1411.0,4248.0,865.0,0.0,0.0,706.0,800.0,24811.0,
+1,Belconnen,"Single, pensioner, in own unit, no car",2026-27,31200.0,1739.0,0.0,0.0,1665.0,4570.0,883.0,0.0,0.0,835.0,800.0,25744.0,933.0
+2,Braddon,"Couple, pensioners, in own house, 2 cars, downsizing to unit in 2026-27",2025-26,45000.0,6493.0,0.0,1434.0,0.0,6125.0,865.0,0.0,1114.0,0.0,800.0,33727.0,
+2,Braddon,"Couple, pensioners, in own house, 2 cars, downsizing to unit in 2026-27",2026-27,47100.0,2208.0,10568.0,1540.0,0.0,6510.0,883.0,10568.0,1217.0,0.0,800.0,39742.0,6015.0
+3,Banks,"Single parent, first income quintile, in own house, 1 car, 1 child who catches the bus to school",2025-26,35800.0,2953.0,0.0,717.0,937.0,6125.0,0.0,0.0,505.0,468.0,800.0,26841.0,
+3,Banks,"Single parent, first income quintile, in own house, 1 car, 1 child who catches the bus to school",2026-27,37000.0,3022.0,0.0,770.0,1084.0,6510.0,0.0,0.0,555.0,542.0,800.0,27511.0,670.0
+4,Cook,"Single, fixed income retiree, in own house, 1 car",2025-26,65300.0,4990.0,0.0,717.0,0.0,4248.0,0.0,0.0,56.0,0.0,0.0,56300.0,
+4,Cook,"Single, fixed income retiree, in own house, 1 car",2026-27,68100.0,4309.0,0.0,770.0,0.0,4573.0,0.0,0.0,61.0,0.0,0.0,58509.0,2208.0
+5,Kingston,"Single, second income quintile, in own unit, no car",2025-26,61200.0,2643.0,0.0,0.0,1411.0,4248.0,0.0,0.0,0.0,0.0,0.0,52898.0,
+5,Kingston,"Single, second income quintile, in own unit, no car",2026-27,63200.0,2758.0,0.0,0.0,1665.0,4573.0,0.0,0.0,0.0,0.0,0.0,54204.0,1306.0
+6,Turner,"Single, third income quintile, 1 car, purchasing first unit in 2026-27",2025-26,81600.0,0.0,0.0,717.0,0.0,4248.0,0.0,0.0,0.0,0.0,0.0,76635.0,
+6,Turner,"Single, third income quintile, 1 car, purchasing first unit in 2026-27",2026-27,84200.0,2559.0,14456.0,770.0,0.0,4573.0,0.0,14456.0,0.0,0.0,0.0,76298.0,-337.0
+7,Wright,"Couple, third income quintile, 2 cars, first time buying house in 2026-27, 1 child who catches bus to school",2025-26,163100.0,0.0,0.0,1434.0,937.0,6125.0,0.0,0.0,0.0,468.0,0.0,155072.0,
+7,Wright,"Couple, third income quintile, 2 cars, first time buying house in 2026-27, 1 child who catches bus to school",2026-27,168400.0,4061.0,48358.0,1540.0,1084.0,6510.0,0.0,48358.0,0.0,542.0,0.0,155747.0,675.0
+8,Ainslie,"Couple, fourth income quintile, in own house, 2 cars, 1 school child and 1 tertiary student who catch the bus",2025-26,210100.0,6144.0,0.0,1434.0,2298.0,7981.0,0.0,0.0,0.0,1149.0,0.0,193392.0,
+8,Ainslie,"Couple, fourth income quintile, in own house, 2 cars, 1 school child and 1 tertiary student who catch the bus",2026-27,217000.0,6642.0,0.0,1540.0,2337.0,8429.0,0.0,0.0,0.0,1168.0,0.0,199220.0,5828.0
+9,Forrest,"Couple, fifth income quintile, in own house, 2 cars, 2 children who catch the bus to school",2025-26,311900.0,15789.0,0.0,1434.0,1874.0,7981.0,0.0,0.0,0.0,937.0,0.0,285759.0,
+9,Forrest,"Couple, fifth income quintile, in own house, 2 cars, 2 children who catch the bus to school",2026-27,322000.0,17872.0,0.0,1540.0,2168.0,8429.0,0.0,0.0,0.0,1084.0,0.0,293075.0,7316.0

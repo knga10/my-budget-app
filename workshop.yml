@@ -1,0 +1,35 @@
+# Metadata for the claudecommunity-au workshop index.
+# The canberra hub reads this file to build its listing.
+
+title: Idea to Production-Ready Product
+short_name: Budget Buddy
+tagline: Turn one slice of the 2026-27 ACT Budget into a live civic app, in two hours.
+
+level: novice to intermediate
+duration_minutes: 120
+capacity: 20
+
+requires:
+  - A free Claude account
+  - A free GitHub account
+  - A personal laptop
+
+teaches:
+  - Context engineering, working with a document pile too big to paste
+  - Getting data out of messy files without writing code
+  - Verifying data before you build on it
+  - Shipping a static app to GitHub Pages
+
+partners:
+  - ProductTank Canberra
+
+runs:
+  - date: TBC
+    city: Canberra
+    venue: CBRIN
+    luma: TBC
+    status: upcoming
+
+repo_is_template: true
+pages_path: /template/
+status: active
