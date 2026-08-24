@@ -63,6 +63,6 @@ on time.
 
 ## On the day, bring
 
-- Laptop and charger. **Not a tablet**
+- Personal laptop and charger. **Not a tablet**
 - The URL of your own repo
 - One rough idea. Half-baked is completely fine
