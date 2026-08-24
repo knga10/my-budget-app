@@ -5,11 +5,12 @@ minutes hunting. The route column points at
 [`EXTRACTING-DATA.md`](../EXTRACTING-DATA.md).
 
 **Bring your own idea instead if you have one.** These exist so nobody stares at
-a blank page at 0:35.
+a blank page at 0:25.
 
-**Want to browse the data and find your own question?** Use
-[`prompts/06-explore-the-data.md`](../prompts/06-explore-the-data.md). Give it
-10 minutes, then commit to something.
+**No idea yet, and none of these grab you?** Open
+[`prompts/00-start-here.md`](../prompts/00-start-here.md) and take **Path 3**.
+It names the exact three files to attach and gives you the paste. Ten minutes,
+then commit to something.
 
 ---
 

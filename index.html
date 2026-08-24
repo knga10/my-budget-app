@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Budget App</title>
+
+<!-- Pinned versions on purpose. An unpinned CDN library shipped a breaking
+     change once and silently broke the live Budget Buddy site. Always pin. -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js" crossorigin></script>
+
+<!-- YOUR DATA GOES IN data.js, NOT IN THIS FILE.
+     It's a plain script tag, not fetch(), so this page works both when you
+     double-click it locally AND when it's live on GitHub Pages. -->
+<script src="data.js"></script>
+
+<style>
+  :root{
+    --surface:#fcfcfb; --card:#fff; --line:#e6e2da;
+    --ink:#2b2420; --ink-2:#5c5249; --ink-3:#857a6e;
+    --accent-a:#b85042;   /* validated pair: use for one series */
+    --accent-b:#0f7ba8;   /* validated pair: use for the other  */
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 20px 80px}
+  h1{font-size:26px;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--ink-2);margin:0 0 26px;font-size:15px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);
+    margin:34px 0 12px;font-weight:600}
+  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  button.card{text-align:left;font:inherit;color:inherit;cursor:pointer}
+  button.card:focus-visible{outline:3px solid var(--accent-b);outline-offset:2px}
+  button.card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .lab{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3)}
+  .val{font-size:27px;font-weight:600;letter-spacing:-.02em;margin-top:4px;
+    font-variant-numeric:tabular-nums}
+  /* Bars: .track and .bar MUST be display:block. They are spans in a lot of
+     generated code, and inline elements ignore width and height. */
+  .track{display:block;flex:1;height:16px;background:#f2efe9;border-radius:0 4px 4px 0}
+  .bar{display:block;height:16px;border-radius:0 4px 4px 0}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-3);background:#faf9f6}
+  td{font-variant-numeric:tabular-nums}
+  footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--ink-3)}
+  a{color:var(--accent-b)}
+</style>
+</head>
+<body>
+<div id="root" class="wrap"></div>
+
+<script type="text/babel">
+const {useState, useEffect} = React;
+
+// ─────────────────────────────────────────────────────────────
+// data.js sets window.DATA. Until you make your own, this is an
+// empty array and the page tells you so.
+// ─────────────────────────────────────────────────────────────
+const DATA = (typeof window !== "undefined" && window.DATA) || [];
+
+const money = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-AU");
+
+function App() {
+  const [sel, setSel] = useState(() => localStorage.getItem("app.sel") || "");
+  useEffect(() => { localStorage.setItem("app.sel", sel); }, [sel]);
+
+  if (!DATA.length) {
+    return (
+      <React.Fragment>
+        <h1>Hello, Budget</h1>
+        <p className="sub">
+          Your template is live. If you can read this on your own GitHub Pages
+          URL, your setup is done and you're ready for the workshop.
+        </p>
+        <div className="card">
+          <div className="lab">Next step</div>
+          <p style={{marginBottom:0}}>
+            Replace <code>data.js</code> with your own extracted data, then
+            build your screens below. See <code>ANNOTATED.md</code> for a
+            walkthrough of this file.
+          </p>
+        </div>
+        <div className="card" style={{marginTop:10, background:"#fdf6ec",
+             borderColor:"#e8d6b8"}}>
+          <div className="lab" style={{color:"#6b4f27"}}>Already uploaded your data?</div>
+          <p style={{marginBottom:0, color:"#6b4f27"}}>
+            Then your browser is showing you a <strong>cached copy</strong> of the
+            old empty <code>data.js</code>. Hard refresh:
+            {" "}<strong>Cmd+Shift+R</strong> on Mac, <strong>Ctrl+Shift+R</strong> on
+            Windows. This catches almost everyone once.
+          </p>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  const item = DATA.find(d => String(d.id) === sel) || DATA[0];
+
+  return (
+    <React.Fragment>
+      {/* ── 1. TITLE ─────────────────────────────────────────── */}
+      <h1>My Budget App</h1>
+      <p className="sub">One sentence: who this is for and what they get in 30 seconds.</p>
+
+      {/* ── 2. PICK ONE ──────────────────────────────────────── */}
+      <h2>1. Pick one</h2>
+      <div className="grid">
+        {DATA.map(d => (
+          <button key={d.id} className="card" aria-pressed={String(d.id) === sel}
+                  onClick={() => setSel(String(d.id))}>
+            <b>{d.name || d.id}</b>
+          </button>
+        ))}
+      </div>
+
+      {/* ── 3. HEADLINE NUMBERS ──────────────────────────────── */}
+      <h2>2. What it means</h2>
+      <div className="grid">
+        <div className="card">
+          <div className="lab">Your headline number</div>
+          <div className="val">{money(item.value || 0)}</div>
+        </div>
+        {/* ADD YOUR OTHER STAT TILES HERE */}
+      </div>
+
+      {/* ── 4. THE DETAIL ────────────────────────────────────── */}
+      {/* ADD YOUR TABLE OR CHART HERE */}
+
+      {/* ── 5. CITATION. Do not delete this. ─────────────────── */}
+      <footer>
+        <p>
+          Every figure comes from <strong>[NAME THE EXACT TABLE AND STATEMENT]</strong>,
+          2026-27 ACT Budget. See the{" "}
+          <a href="https://www.treasury.act.gov.au/budget/budget-2026-27/budget-papers-and-statements">
+            official Budget papers</a>.
+        </p>
+        <p>
+          This is an illustrative guide, not financial advice or an eligibility
+          determination. Check <a href="https://www.act.gov.au">act.gov.au</a> for
+          eligibility criteria and exact figures.
+        </p>
+        <p>Your selection is saved in this browser only. Nothing is sent anywhere.</p>
+      </footer>
+    </React.Fragment>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

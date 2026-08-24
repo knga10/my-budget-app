@@ -6,6 +6,16 @@ one is copy and paste.
 
 Everything here was tested against the real files before it was written.
 
+> **This file is the reasoning. The pastes live in
+> [`prompts/01-extract.md`](prompts/01-extract.md).**
+>
+> Read this once, ideally before the day, to understand why the routes exist and
+> which one suits your table. On the day, work from the prompt file, so there's
+> only ever one copy of each prompt to keep correct.
+>
+> **If you took Path 3** in `prompts/00-start-here.md`, your data is already
+> extracted and you can skip this entirely.
+
 ---
 
 ## Pick your route in 20 seconds
@@ -52,13 +62,9 @@ We checked every figure against the Word version. They match.
 ### What to do
 
 1. Open the `.xlsx`. Click the `Chapter 3.3` tab. Scroll to row 13.
-2. Either work in Excel directly, or attach the whole `.xlsx` to a Claude chat and say:
+2. Either work in Excel directly, or attach the whole `.xlsx` to a Claude chat.
 
-> I've attached the official ACT Budget tables spreadsheet.
-> Look at the sheet called "Chapter 3.3". It has two tables stacked in it.
-> Give me Table 3.3.2 as a CSV with one row per household per year, with the
-> household name and suburb carried down as their own columns.
-> Then show me the first five rows so I can check it.
+**The paste:** [`prompts/01-extract.md` → Route 1](prompts/01-extract.md#route-1).
 
 That's the entire extraction step. About 90 seconds.
 
@@ -107,20 +113,8 @@ a short paste. Pretty much every table in this Budget fits:
 1. Open the `.docx` in Word (or Google Docs, or Pages).
 2. Hover over the table, click the small cross handle at its top-left corner to
    select the whole table. `Cmd+C`.
-3. Paste straight into the Claude chat. Then:
-
-> That's Table 3.3.2 from the 2026-27 ACT Budget Cost of Living Statement,
-> pasted out of Word.
->
-> The first two lines are headers. After that the rows come in groups of three:
-> a household name on its own line, then its 2025-26 figures, then its 2026-27
-> figures.
->
-> Turn it into a CSV with one row per household per year. Carry the household
-> name down into its own column, and split the suburb out of it.
-> Strip the dollar signs and commas so the numbers are plain numbers.
-> Treat blank cells as empty, not zero.
-
+3. Paste straight into the Claude chat, then use
+   **[`prompts/01-extract.md` → Route 2](prompts/01-extract.md#route-2)**.
 4. Download the CSV. Open it.
 
 ### If your table is too big to paste
@@ -141,9 +135,7 @@ same result and you stay in a tool you already know.
 
 No code, no copy-paste. Attach the `.docx` and ask for the table.
 
-> I've attached the 2026-27 ACT Budget Cost of Living Statement.
-> Find Table 3.3.2 and give me its contents as a CSV, one row per household
-> per year.
+**The paste:** [`prompts/01-extract.md` → Route 3](prompts/01-extract.md#route-3).
 
 **This works.** Claude reads the document directly. But be aware of what's
 happening: it is transcribing about 250 numbers by reading them, not by
@@ -174,48 +166,23 @@ That's a fine instruction, and it's useless to you, because if you knew to say
 that you wouldn't need this guide. **You don't need to know the fix. You need to
 know the check.**
 
-Say this instead:
-
-> Attached is the 2026-27 ACT Budget Cost of Living Statement.
-> Write and run a script that extracts Table 3.3.2 to a CSV I can download.
->
-> This table has merged cells and money formatted like `$29,900`, so I expect
-> the first attempt to have problems. So before you show me anything:
->
-> 1. Extract it.
-> 2. Check your own work: for every row, does
->    `disposable income - (all the taxes) + (all the concessions)` equal the
->    published `net disposable income`?
-> 3. If most rows don't reconcile, your columns are misaligned. Work out why,
->    fix it, and run it again.
-> 4. Only then show me the result, and show me the reconciliation table so I
->    can see it passed.
-
-You have described the outcome and the test. Claude works out the library
-detail. That's the transferable skill, not the API name.
+**The paste:** [`prompts/01-extract.md` → Route 4](prompts/01-extract.md#route-4).
+It states the outcome and the test, and lets Claude correct itself.
 
 ---
 
 ## The check that makes every route safe
 
-Whichever route you took, run this before you build anything:
+Whichever route you took, **run the reconciliation check before you build
+anything**. It is the single step that separates a demo from something you'd put
+your name on, and it's the same check for all four routes.
 
-> For every row of this data, check whether
-> `disposable_income - (sum of the five tax columns) + (sum of the five
-> concession columns)` equals `net_disposable_income`.
-> Show me all 18 rows: calculated value, published value, difference.
-> Flag anything off by more than $2.
+**The paste and how to read the result:**
+[`prompts/02-verify.md`](prompts/02-verify.md).
 
-Read the result like this:
-
-| What you see | What it means | Do this |
-|---|---|---|
-| Every row reconciles | Your data is right | Go build |
-| One or two rows off, rest perfect | Likely an error in the published table | **Flag it in your app, don't fix it** |
-| Most rows off | Your columns are shifted | Go back a step, try a different route |
-
-When we ran this, **17 of 18 rows reconciled to the dollar**. One was out by
-$899. That's a finding worth putting on screen, not a bug worth hiding.
+When we ran it on Table 3.3.2, **17 of 18 rows reconciled to the dollar**. One
+was out by $899. That's a finding worth putting on screen, not a bug worth
+hiding.
 
 ### Finding the check for other tables
 

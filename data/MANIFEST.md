@@ -46,9 +46,12 @@ spreadsheet, **65 tables across 14 sheets**, already clean. Almost nobody opens
 it. **Check here before you extract anything.**
 
 It covers the Budget Outlook (chapters 1 to 4), including Table 3.3.1 and
-Table 3.3.2 on the sheet `Chapter 3.3`. It does **not** cover Statements A to H,
-so accountability indicators, changes to appropriation and per-directorate
-infrastructure programs are not in it.
+Table 3.3.2 on the sheet `Chapter 3.3`.
+
+**It does not repeat Statements A to H, but it does contain whole-of-government
+versions of some of their tables.** Which ones, and what each version leaves
+out, is in [`CROSSWALK.md`](CROSSWALK.md). Worth two minutes before you extract
+anything out of Word.
 
 ## `extracted/` : pre-extracted CSVs, your safety net
 

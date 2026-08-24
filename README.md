@@ -1,6 +1,6 @@
 # Idea to Production-Ready Product
 
-**Claude Community Australia x ProductTank Canberra**
+**ProductTank Canberra x Claude Community Australia**
 A 2-hour workshop. Turn one slice of the 2026-27 ACT Budget into a live civic
 app, using [Budget Buddy](https://knga10.github.io/civiccanberra) as the template.
 
@@ -14,9 +14,11 @@ pattern for turning any messy pile of documents into a working tool.
 1. **[`SETUP.md`](SETUP.md)** : 15 minutes of pre-work. Please do this before you arrive.
 2. **[`EXTRACTING-DATA.md`](EXTRACTING-DATA.md)** : four ways to get data out of these files. Three involve no code.
 3. **[`ideas/IDEA-CARDS.md`](ideas/IDEA-CARDS.md)** : ten things you could build. Pick two.
-   Or, if you'd rather browse the data and find your own question first, use
-   **[`prompts/06-explore-the-data.md`](prompts/06-explore-the-data.md)**.
 4. **[`TIPS.md`](TIPS.md)** : which plan, which model, chat or Claude Code, and how to debug.
+
+**On the day, open [`prompts/00-start-here.md`](prompts/00-start-here.md) first.**
+It has three paths depending on whether you know the documents and whether you
+know what you want to build. All three converge. Nobody is behind.
 
 **You do not need to pay for anything, and you do not need to know how to code.**
 A free Claude account is enough.
@@ -37,10 +39,12 @@ A free Claude account is enough.
 │   ├── markdown/              all 13 statements as markdown, with heading anchors
 │   └── extracted/             five pre-extracted CSVs, your safety net
 │
-├── template/                  your starting point: index.html + data.js
+├── index.html                 your app. This is what your live URL serves
+├── data.js                    your data. Empty until you fill it
+├── ANNOTATED.md               walkthrough of index.html, line by line
 ├── examples/                  a finished build, for reference
 ├── reference/budget-buddy-v1/ the app we tear down at 0:20
-├── prompts/                   copy-paste prompts, one per step, plus an explore-first set
+├── prompts/                   00-start-here, then extract, verify, build, deploy
 └── ideas/IDEA-CARDS.md        ten starter ideas
 ```
 
@@ -60,31 +64,19 @@ not during.
 
 ## The day
 
-| Agenda | | |
+| Time | | |
 |---|---|---|
 | 0:00 | Welcome, framing, pair up | 10 min |
-| 0:10 | What's actually in the 13 files | 5 min |
-| 0:15 | Budget Buddy teardown | 5 min |
-| 0:20 | Pick your lane, scope your idea | 10 min |
-| 0:30 | **Sprint 1: get the data out** | 15 min |
-| 0:50 | **Data checkpoint** | 5 min |
-| 0:55| **Sprint 2: build and deploy** | 45 min |
-| 1:35 | Show and tell | 25 min |
-| 2:00 | Q&A, then wrap | 15 min |
+| 0:10 | What's actually in the 13 files | 10 min |
+| 0:20 | Budget Buddy teardown | 5 min |
+| 0:25 | Pick your lane, scope your idea | 10 min |
+| 0:35 | **Sprint 1: get the data out** | 20 min |
+| 0:55 | **Data checkpoint** | 5 min |
+| 1:00 | **Sprint 2: build and deploy** | 35 min |
+| 1:35 | Show and tell, then wrap | 25 min |
 
-Two hard gates: **a data file you can open by 0:50**, and **a live URL by 1:25**.
+Two hard gates: **a data file you can open by 0:55**, and **a live URL by 1:25**.
 Polish comes after both.
-
-| Which file to open and when | | |
-|---|---|---|
-| 0:00 | SETUP.md  ·  done at home, ends with your URL live  | read |
-| 0:20 | prompts/00-kickoff.md  ·  Path A or Path B, then paste | paste |
-| 0:30 | EXTRACTING-DATA.md  ·  pick one of the four routes | read |
-| 0:35 | prompts/02-extract.md  ·  paste, get a CSV, open it | paste |
-| 0:50 | prompts/04-verify.md  ·  paste, reconcile the numbers| paste |
-| 0:55| prompts/03-build.md  ·  paste, build on template/ | paste |
-| 1:25 | prompts/05-deploy.md  ·  upload to GitHub, go live | do |
-| 1:30 | CHECKLIST.md  ·  run through it before you demo | check |
 
 ---
 

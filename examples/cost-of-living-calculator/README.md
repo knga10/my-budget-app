@@ -1,7 +1,7 @@
 # Worked example: Cost of Living Calculator
 
 A finished build of idea card 1, so you can see where you're heading. Two files,
-exactly the pattern in `template/`.
+exactly the pattern in the root `index.html` and `data.js`.
 
 - `data.js` : 9 household scenarios from Table 3.3.2
 - `index.html` : the UI

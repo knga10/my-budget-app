@@ -1,6 +1,6 @@
 # Pre-extracted CSVs
 
-Your safety net. If you're stuck at the 1:05 data checkpoint, grab one of these
+Your safety net. If you're stuck at the 0:55 data checkpoint, grab one of these
 and keep building.
 
 **Read the reconciliation column before you trust a file.** We ran the check on
