@@ -1,158 +1,662 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Budget App</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Canberra's Building Program — 2026-27 Budget</title>
 
-<!-- Pinned versions on purpose. An unpinned CDN library shipped a breaking
-     change once and silently broke the live Budget Buddy site. Always pin. -->
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js" crossorigin></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
 
-<!-- YOUR DATA GOES IN data.js, NOT IN THIS FILE.
-     It's a plain script tag, not fetch(), so this page works both when you
-     double-click it locally AND when it's live on GitHub Pages. -->
+<!-- Data file: separate from the UI, loaded as a script tag (not fetch) so this works from file:// and GitHub Pages alike -->
 <script src="data.js"></script>
 
 <style>
-  :root{
-    --surface:#fcfcfb; --card:#fff; --line:#e6e2da;
-    --ink:#2b2420; --ink-2:#5c5249; --ink-3:#857a6e;
-    --accent-a:#b85042;   /* validated pair: use for one series */
-    --accent-b:#0f7ba8;   /* validated pair: use for the other  */
+  :root {
+    --clay: #B85042;
+    --harbour: #0F7BA8;
+    --ink: #22252A;
+    --paper: #F7F5F0;
+    --card: #FFFFFF;
+    --line: #DCD6C9;
+    --muted: #6B675E;
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--surface);color:var(--ink);
-    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  .wrap{max-width:860px;margin:0 auto;padding:28px 20px 80px}
-  h1{font-size:26px;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
-  .sub{color:var(--ink-2);margin:0 0 26px;font-size:15px}
-  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);
-    margin:34px 0 12px;font-weight:600}
-  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-  button.card{text-align:left;font:inherit;color:inherit;cursor:pointer}
-  button.card:focus-visible{outline:3px solid var(--accent-b);outline-offset:2px}
-  button.card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-  .lab{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3)}
-  .val{font-size:27px;font-weight:600;letter-spacing:-.02em;margin-top:4px;
-    font-variant-numeric:tabular-nums}
-  /* Bars: .track and .bar MUST be display:block. They are spans in a lot of
-     generated code, and inline elements ignore width and height. */
-  .track{display:block;flex:1;height:16px;background:#f2efe9;border-radius:0 4px 4px 0}
-  .bar{display:block;height:16px;border-radius:0 4px 4px 0}
-  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);
-    border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line)}
-  th:first-child,td:first-child{text-align:left}
-  thead th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;
-    color:var(--ink-3);background:#faf9f6}
-  td{font-variant-numeric:tabular-nums}
-  footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--line);
-    font-size:13px;color:var(--ink-3)}
-  a{color:var(--accent-b)}
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    line-height: 1.5;
+  }
+  .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  header.masthead {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 28px;
+  }
+  header.masthead .eyebrow {
+    font-family: inherit;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 6px;
+  }
+  header.masthead h1 {
+    font-size: 32px;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  header.masthead p.sub {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  section.block {
+    margin-bottom: 40px;
+  }
+  .step-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  h2 {
+    font-size: 21px;
+    margin: 0 0 14px;
+  }
+
+  /* Screen 1: picker */
+  .picker-box {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 18px 20px;
+  }
+  .picker-box input[type="text"] {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  select.project-select {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--card);
+    color: var(--ink);
+  }
+  .result-count {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Screen 2: tiles */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 640px) {
+    .tiles { grid-template-columns: 1fr; }
+  }
+  .tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ink);
+    border-radius: 3px;
+    padding: 16px 18px;
+  }
+  .tile .tile-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .tile .tile-value {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  .tile .tile-note {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .tile.na .tile-value { color: var(--muted); font-weight: 500; font-size: 20px; }
+
+  /* Screen 3: chart + legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px;
+  }
+  .chart-caption {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 10px 0 0;
+  }
+
+  /* comparison mini table under chart */
+  table.compare {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    margin-top: 16px;
+  }
+  table.compare th, table.compare td {
+    text-align: right;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  table.compare th:first-child, table.compare td:first-child { text-align: left; }
+  table.compare thead th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  table.compare .row-label { display: flex; align-items: center; gap: 8px; }
+
+  /* Screen 4: full table */
+  .table-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .table-controls input, .table-controls select {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--card);
+  }
+  .table-controls input[type="text"] { flex: 1; min-width: 200px; }
+
+  .full-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  table.full {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12.5px;
+    background: var(--card);
+    min-width: 760px;
+  }
+  table.full th, table.full td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+    white-space: nowrap;
+  }
+  table.full th:first-child, table.full td:first-child {
+    text-align: left;
+    white-space: normal;
+    min-width: 240px;
+  }
+  table.full thead th {
+    position: sticky;
+    top: 0;
+    background: #EFEBE1;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+    z-index: 1;
+  }
+  table.full tbody tr.subtotal { background: #F1EFE8; font-weight: 600; }
+  table.full tbody tr.grand_total { background: #E9E4D6; font-weight: 700; }
+  table.full tbody tr.selected-row { background: #FBEDEA; }
+  .name-cell { display: flex; align-items: center; gap: 8px; }
+  .footnote-mark {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    color: var(--muted);
+    vertical-align: super;
+  }
+  .cell-na { color: var(--muted); font-style: italic; }
+  .src-line {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 10.5px;
+    color: var(--muted);
+  }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer p { margin: 0 0 8px; }
+  footer a { color: var(--harbour); }
 </style>
 </head>
 <body>
-<div id="root" class="wrap"></div>
+<div id="root"></div>
 
-<script type="text/babel">
-const {useState, useEffect} = React;
+<script type="text/babel" data-presets="react">
+const { useState, useMemo } = React;
 
-// ─────────────────────────────────────────────────────────────
-// data.js sets window.DATA. Until you make your own, this is an
-// empty array and the page tells you so.
-// ─────────────────────────────────────────────────────────────
-const DATA = (typeof window !== "undefined" && window.DATA) || [];
+const CLAY = "#B85042";
+const HARBOUR = "#0F7BA8";
 
-const money = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-AU");
+const YEAR_COLS = [
+  { key: "fy2026_27", label: "2026-27" },
+  { key: "fy2027_28", label: "2027-28" },
+  { key: "fy2028_29", label: "2028-29" },
+  { key: "fy2029_30", label: "2029-30" },
+];
 
-function App() {
-  const [sel, setSel] = useState(() => localStorage.getItem("app.sel") || "");
-  useEffect(() => { localStorage.setItem("app.sel", sel); }, [sel]);
+function fmtMoney(v) {
+  // Source figures are in $'000. Display as dollars for a resident-facing figure.
+  if (v === null || v === undefined || typeof v !== "number") return null;
+  const dollars = v * 1000;
+  return "$" + dollars.toLocaleString("en-AU");
+}
 
-  if (!DATA.length) {
-    return (
-      <React.Fragment>
-        <h1>Hello, Budget</h1>
-        <p className="sub">
-          Your template is live. If you can read this on your own GitHub Pages
-          URL, your setup is done and you're ready for the workshop.
-        </p>
-        <div className="card">
-          <div className="lab">Next step</div>
-          <p style={{marginBottom:0}}>
-            Replace <code>data.js</code> with your own extracted data, then
-            build your screens below. See <code>ANNOTATED.md</code> for a
-            walkthrough of this file.
-          </p>
-        </div>
-        <div className="card" style={{marginTop:10, background:"#fdf6ec",
-             borderColor:"#e8d6b8"}}>
-          <div className="lab" style={{color:"#6b4f27"}}>Already uploaded your data?</div>
-          <p style={{marginBottom:0, color:"#6b4f27"}}>
-            Then your browser is showing you a <strong>cached copy</strong> of the
-            old empty <code>data.js</code>. Hard refresh:
-            {" "}<strong>Cmd+Shift+R</strong> on Mac, <strong>Ctrl+Shift+R</strong> on
-            Windows. This catches almost everyone once.
-          </p>
-        </div>
-      </React.Fragment>
-    );
-  }
+function fmtRaw(v) {
+  if (v === null || v === undefined) return "—";
+  if (typeof v === "number") return v.toLocaleString("en-AU");
+  return v; // "TBD" / "Ongoing" / "DLP"
+}
 
-  const item = DATA.find(d => String(d.id) === sel) || DATA[0];
+function isNum(v) {
+  return typeof v === "number";
+}
+
+// Split "2,4" into ["2","4"]
+function footnoteList(fn) {
+  if (!fn) return [];
+  return fn.split(",").map(s => s.trim());
+}
+
+function Dot({ color }) {
+  return <span className="dot" style={{ background: color }} aria-hidden="true"></span>;
+}
+
+function Picker({ projects, selected, onSelect }) {
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => {
+    if (!query.trim()) return projects;
+    const q = query.toLowerCase();
+    return projects.filter(p => p.projectName.toLowerCase().includes(q));
+  }, [query, projects]);
 
   return (
-    <React.Fragment>
-      {/* ── 1. TITLE ─────────────────────────────────────────── */}
-      <h1>My Budget App</h1>
-      <p className="sub">One sentence: who this is for and what they get in 30 seconds.</p>
-
-      {/* ── 2. PICK ONE ──────────────────────────────────────── */}
-      <h2>1. Pick one</h2>
-      <div className="grid">
-        {DATA.map(d => (
-          <button key={d.id} className="card" aria-pressed={String(d.id) === sel}
-                  onClick={() => setSel(String(d.id))}>
-            <b>{d.name || d.id}</b>
-          </button>
+    <div className="picker-box">
+      <input
+        type="text"
+        placeholder="Search a project — e.g. 'light rail', 'school', 'hospital'…"
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        aria-label="Search infrastructure projects"
+      />
+      <select
+        className="project-select"
+        value={selected ? selected.projectName : ""}
+        onChange={e => {
+          const p = projects.find(p => p.projectName === e.target.value);
+          if (p) onSelect(p);
+        }}
+        size={Math.min(8, Math.max(4, filtered.length))}
+        aria-label="Select an infrastructure project"
+      >
+        {filtered.length === 0 && <option disabled>No projects match "{query}"</option>}
+        {filtered.map(p => (
+          <option key={p.sourceLine} value={p.projectName}>
+            {p.projectName} {p.category ? `— ${p.category}` : ""}
+          </option>
         ))}
+      </select>
+      <div className="result-count">
+        {filtered.length} of {projects.length} projects shown
+        {selected ? ` — currently viewing "${selected.projectName}"` : ""}
       </div>
-
-      {/* ── 3. HEADLINE NUMBERS ──────────────────────────────── */}
-      <h2>2. What it means</h2>
-      <div className="grid">
-        <div className="card">
-          <div className="lab">Your headline number</div>
-          <div className="val">{money(item.value || 0)}</div>
-        </div>
-        {/* ADD YOUR OTHER STAT TILES HERE */}
-      </div>
-
-      {/* ── 4. THE DETAIL ────────────────────────────────────── */}
-      {/* ADD YOUR TABLE OR CHART HERE */}
-
-      {/* ── 5. CITATION. Do not delete this. ─────────────────── */}
-      <footer>
-        <p>
-          Every figure comes from <strong>[NAME THE EXACT TABLE AND STATEMENT]</strong>,
-          2026-27 ACT Budget. See the{" "}
-          <a href="https://www.treasury.act.gov.au/budget/budget-2026-27/budget-papers-and-statements">
-            official Budget papers</a>.
-        </p>
-        <p>
-          This is an illustrative guide, not financial advice or an eligibility
-          determination. Check <a href="https://www.act.gov.au">act.gov.au</a> for
-          eligibility criteria and exact figures.
-        </p>
-        <p>Your selection is saved in this browser only. Nothing is sent anywhere.</p>
-      </footer>
-    </React.Fragment>
+    </div>
   );
 }
+
+function StatTiles({ project }) {
+  const tpv = project.totalProjectValue;
+  const thisYear = project.fy2026_27;
+  const completion = project.physicalCompletionDate;
+
+  const tpvIsNum = isNum(tpv);
+  const thisYearIsNum = isNum(thisYear);
+
+  return (
+    <div className="tiles">
+      <div className={"tile" + (tpvIsNum ? "" : " na")}>
+        <p className="tile-label">Total project value</p>
+        <p className="tile-value">{tpvIsNum ? fmtMoney(tpv) : (tpv || "Not published")}</p>
+        <p className="tile-note">
+          {tpvIsNum
+            ? "Full lifetime cost of the project, as published."
+            : "The Budget lists this as \"" + (tpv || "blank") + "\" rather than a dollar figure."}
+        </p>
+      </div>
+      <div className={"tile" + (thisYearIsNum ? "" : " na")}>
+        <p className="tile-label">Funded in 2026-27</p>
+        <p className="tile-value">{thisYearIsNum ? fmtMoney(thisYear) : (thisYear || "Not published")}</p>
+        <p className="tile-note">What's budgeted for this project in the coming financial year.</p>
+      </div>
+      <div className="tile">
+        <p className="tile-label">Physical completion</p>
+        <p className="tile-value" style={{fontSize: "22px"}}>{completion || "Not published"}</p>
+        <p className="tile-note">
+          {completion === "TBD" ? "Date to be determined."
+            : completion === "Ongoing" ? "An ongoing program, not a one-off completion."
+            : completion === "DLP" ? "In its defect liability period — physically complete."
+            : "As published in the Budget statement."}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function BarChart({ project, categoryTotal }) {
+  const width = 640, height = 260;
+  const padLeft = 60, padBottom = 34, padTop = 16, padRight = 16;
+  const plotW = width - padLeft - padRight;
+  const plotH = height - padTop - padBottom;
+
+  const projVals = YEAR_COLS.map(c => (isNum(project[c.key]) ? project[c.key] : 0));
+  const catVals = YEAR_COLS.map(c => (categoryTotal && isNum(categoryTotal[c.key]) ? categoryTotal[c.key] : 0));
+  const maxVal = Math.max(1, ...projVals, ...catVals);
+
+  const groupW = plotW / YEAR_COLS.length;
+  const barW = groupW * 0.32;
+
+  const yTicks = 4;
+  const tickVals = Array.from({ length: yTicks + 1 }, (_, i) => Math.round((maxVal / yTicks) * i));
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} width="100%" role="img"
+      aria-label="Bar chart comparing this project's yearly funding to its category's total yearly funding">
+      {/* gridlines + y labels */}
+      {tickVals.map((tv, i) => {
+        const y = padTop + plotH - (tv / maxVal) * plotH;
+        return (
+          <g key={i}>
+            <line x1={padLeft} x2={width - padRight} y1={y} y2={y} stroke="#DCD6C9" strokeWidth="1" />
+            <text x={padLeft - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#6B675E" fontFamily="sans-serif">
+              {tv >= 1000 ? (tv/1000).toFixed(0) + "k" : tv}
+            </text>
+          </g>
+        );
+      })}
+      {/* bars */}
+      {YEAR_COLS.map((c, i) => {
+        const gx = padLeft + i * groupW;
+        const projH = (projVals[i] / maxVal) * plotH;
+        const catH = (catVals[i] / maxVal) * plotH;
+        const projX = gx + groupW/2 - barW - 3;
+        const catX = gx + groupW/2 + 3;
+        return (
+          <g key={c.key}>
+            <rect x={projX} y={padTop + plotH - projH} width={barW} height={projH} fill={CLAY} rx="1.5" />
+            <rect x={catX} y={padTop + plotH - catH} width={barW} height={catH} fill={HARBOUR} rx="1.5" />
+            <text x={gx + groupW/2} y={height - padBottom + 16} textAnchor="middle" fontSize="11" fill="#22252A" fontFamily="sans-serif">
+              {c.label}
+            </text>
+          </g>
+        );
+      })}
+      <line x1={padLeft} x2={width-padRight} y1={padTop+plotH} y2={padTop+plotH} stroke="#22252A" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function ComparisonScreen({ project, categoryTotal }) {
+  return (
+    <section className="block">
+      <p className="step-label">Screen 3</p>
+      <h2>How this project compares to its category</h2>
+      <div className="legend">
+        <span className="legend-item"><Dot color={CLAY} /> {project.projectName}</span>
+        <span className="legend-item"><Dot color={HARBOUR} /> All "{project.category}" spending, {project.category ? "combined" : ""}</span>
+      </div>
+      <div className="chart-card">
+        <BarChart project={project} categoryTotal={categoryTotal} />
+        <p className="chart-caption">
+          $'000 per financial year. "{project.category}" total is the published subtotal row for that category, not a recalculation.
+        </p>
+        <table className="compare">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>{project.projectName.length > 28 ? "This project" : project.projectName}</th>
+              <th>{project.category} total</th>
+              <th>Share of category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {YEAR_COLS.map(c => {
+              const pv = project[c.key];
+              const cv = categoryTotal ? categoryTotal[c.key] : null;
+              const share = (isNum(pv) && isNum(cv) && cv > 0) ? ((pv / cv) * 100) : null;
+              return (
+                <tr key={c.key}>
+                  <td className="row-label"><Dot color="transparent" style={{visibility:"hidden"}} />{c.label}</td>
+                  <td>{fmtRaw(pv)}</td>
+                  <td>{fmtRaw(cv)}</td>
+                  <td>{share !== null ? share.toFixed(1) + "%" : "—"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function FullTable({ data, selected }) {
+  const [query, setQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+
+  const categories = useMemo(() => {
+    const set = new Set(data.filter(r => r.rowType === "project").map(r => r.category));
+    return ["All", ...Array.from(set)];
+  }, [data]);
+
+  const filtered = useMemo(() => {
+    return data.filter(r => {
+      if (categoryFilter !== "All" && r.category !== categoryFilter && r.rowType === "project") return false;
+      if (categoryFilter !== "All" && r.rowType !== "project") {
+        // keep subtotal for the filtered category, hide others and grand total
+        if (r.rowType === "subtotal" && r.category !== categoryFilter) return false;
+        if (r.rowType === "grand_total") return false;
+      }
+      if (query.trim() && !r.projectName.toLowerCase().includes(query.toLowerCase())) return false;
+      return true;
+    });
+  }, [data, query, categoryFilter]);
+
+  function rowDotColor(row) {
+    if (selected && row.projectName === selected.projectName && row.sourceLine === selected.sourceLine) return CLAY;
+    if (row.rowType === "subtotal" || row.rowType === "grand_total") return HARBOUR;
+    return "#C9C3B4"; // neutral, still a visible dot — identity also carried by row style + text
+  }
+
+  return (
+    <section className="block">
+      <p className="step-label">Screen 4</p>
+      <h2>Every line item in the program</h2>
+      <div className="legend">
+        <span className="legend-item"><Dot color={CLAY} /> Project you've selected</span>
+        <span className="legend-item"><Dot color={HARBOUR} /> Category / program total</span>
+        <span className="legend-item"><Dot color="#C9C3B4" /> Other individual projects</span>
+      </div>
+      <div className="table-controls">
+        <input
+          type="text"
+          placeholder="Filter by name…"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          aria-label="Filter table by project name"
+        />
+        <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} aria-label="Filter table by category">
+          {categories.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+      </div>
+      <div className="full-table-wrap">
+        <table className="full">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Total value</th>
+              <th>2026-27</th>
+              <th>2027-28</th>
+              <th>2028-29</th>
+              <th>2029-30</th>
+              <th>4-yr investment</th>
+              <th>Completion</th>
+              <th>Source line</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(r => {
+              const isSelected = selected && r.projectName === selected.projectName && r.sourceLine === selected.sourceLine;
+              return (
+                <tr key={r.sourceLine} className={(r.rowType !== "project" ? r.rowType : "") + (isSelected ? " selected-row" : "")}>
+                  <td>
+                    <div className="name-cell">
+                      <Dot color={rowDotColor(r)} />
+                      <span>
+                        {r.projectName}
+                        {r.footnotes && <sup className="footnote-mark">[{r.footnotes}]</sup>}
+                      </span>
+                    </div>
+                  </td>
+                  <td className={isNum(r.totalProjectValue) ? "" : "cell-na"}>{fmtRaw(r.totalProjectValue)}</td>
+                  <td>{fmtRaw(r.fy2026_27)}</td>
+                  <td>{fmtRaw(r.fy2027_28)}</td>
+                  <td>{fmtRaw(r.fy2028_29)}</td>
+                  <td>{fmtRaw(r.fy2029_30)}</td>
+                  <td>{fmtRaw(r.fourYearInvestment)}</td>
+                  <td className={r.physicalCompletionDate ? "" : "cell-na"}>{r.physicalCompletionDate || "—"}</td>
+                  <td className="src-line">L{r.sourceLine}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="chart-caption">
+        Figures in $'000 as published, except "Total value" tiles above which are converted to dollars. Nothing here is recalculated except where noted.
+      </p>
+    </section>
+  );
+}
+
+function App() {
+  const data = window.DATA || [];
+  const projects = useMemo(() => data.filter(r => r.rowType === "project"), [data]);
+  const [selected, setSelected] = useState(projects[0] || null);
+
+  const categoryTotal = useMemo(() => {
+    if (!selected) return null;
+    return data.find(r => r.rowType === "subtotal" && r.category === selected.category) || null;
+  }, [data, selected]);
+
+  if (!selected) {
+    return <div className="wrap"><p>No project data loaded. Check that data.js is present alongside this file.</p></div>;
+  }
+
+  return (
+    <div className="wrap">
+      <header className="masthead">
+        <p className="eyebrow sans">Infrastructure Canberra · 2026-27 ACT Budget</p>
+        <h1>What's actually being built, and when</h1>
+        <p className="sub">Pick a project from the 2026-27 Infrastructure Program and see what's funded, this year and over the next four.</p>
+      </header>
+
+      <section className="block">
+        <p className="step-label">Screen 1</p>
+        <h2>Pick a project</h2>
+        <Picker projects={projects} selected={selected} onSelect={setSelected} />
+      </section>
+
+      <section className="block">
+        <p className="step-label">Screen 2</p>
+        <h2>{selected.projectName}</h2>
+        <StatTiles project={selected} />
+      </section>
+
+      <ComparisonScreen project={selected} categoryTotal={categoryTotal} />
+
+      <FullTable data={data} selected={selected} />
+
+      <footer>
+        <p>
+          Figures are drawn from <strong>Table 9: 2026-27 Infrastructure Canberra Infrastructure Program</strong>
+          {" "}in the <strong>Infrastructure Canberra 2026-27 Budget Statement</strong> (ACT Budget 2026-27, ACT Treasury).
+          Each row links to its exact source line via the "Source line" column in the full table.
+        </p>
+        <p>
+          Source: <a href="https://www.treasury.act.gov.au/budget/budget-2026-27/budget-papers-and-statements" target="_blank" rel="noopener noreferrer">treasury.act.gov.au</a>
+        </p>
+        <p>This is an illustrative guide built for a workshop, not financial or planning advice — always check the official Budget papers before relying on a figure.</p>
+        <p>Your project selection stays in your browser only. Nothing is sent anywhere, saved, or shared.</p>
+      </footer>
+    </div>
+  );
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
